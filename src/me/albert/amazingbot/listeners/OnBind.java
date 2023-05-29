@@ -3,6 +3,7 @@ package me.albert.amazingbot.listeners;
 import me.albert.amazingbot.AmazingBot;
 import me.albert.amazingbot.bot.Bot;
 import me.albert.amazingbot.events.message.GroupMessageEvent;
+import me.albert.amazingbot.utils.FoliaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public class OnBind implements Listener {
             sendBind(event.getUserID(), p);
             event.response("请在游戏内根据提示完成验证!");
             tempUser.add(event.getUserID());
-            Bukkit.getScheduler().runTaskLater(AmazingBot.getInstance(), () -> tempUser.remove(event.getUserID()), 20 * 60 * 60);
+            FoliaUtil.runTaskLater(AmazingBot.getInstance(), () -> tempUser.remove(event.getUserID()), 20 * 60 * 60);
         }
     }
 
@@ -81,7 +82,7 @@ public class OnBind implements Listener {
             player.sendMessage(s);
         }
         binds.put(player.getUniqueId(), userID);
-        Bukkit.getScheduler().runTaskLater(AmazingBot.getInstance(), () -> binds.remove(player.getUniqueId()), 20 * 60);
+        FoliaUtil.runTaskLater(AmazingBot.getInstance(), () -> binds.remove(player.getUniqueId()), 20 * 60);
 
     }
 

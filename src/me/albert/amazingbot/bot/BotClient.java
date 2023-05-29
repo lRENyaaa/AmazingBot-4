@@ -8,6 +8,7 @@ import me.albert.amazingbot.events.locale.WebSocketConnectedEvent;
 import me.albert.amazingbot.events.locale.WebSocketPostSendEvent;
 import me.albert.amazingbot.events.locale.WebSocketPreSendEvent;
 import me.albert.amazingbot.events.locale.WebSocketReceiveEvent;
+import me.albert.amazingbot.utils.FoliaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.java_websocket.client.WebSocketClient;
@@ -27,7 +28,7 @@ public class BotClient extends WebSocketClient {
     private static final AtomicInteger sendTask = new AtomicInteger(0);
     private static AmazingBot instance;
     private final ConcurrentHashMap<UUID, CompletableFuture<JsonObject>> responseMap = new ConcurrentHashMap<>();
-    public int taskID;
+    public FoliaUtil.Task task;
 
 
     private BotClient(URI serverURI) {
@@ -103,7 +104,7 @@ public class BotClient extends WebSocketClient {
             return;
         }
         recTask.incrementAndGet();
-        Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
+        FoliaUtil.runTaskAsync(instance, () -> {
             try {
                 processMessageRec(msg);
             } catch (Exception e) {
@@ -157,12 +158,12 @@ public class BotClient extends WebSocketClient {
         int delay = instance.getConfig().getInt("main.auto_reconnect");
         if (instance.isEnabled() && code != 1000) {
             AmazingBot.getInstance().getLogger().info("§a将在" + delay + "秒后再次尝试连接");
-            taskID = Bukkit.getScheduler().runTaskLater(instance, () -> {
+            task = FoliaUtil.runTaskLater(instance, () -> {
                 if (Bot.getClient() != this) {
                     return;
                 }
                 reconnect();
-            }, 20L * delay).getTaskId();
+            }, 20L * delay);
         }
     }
 

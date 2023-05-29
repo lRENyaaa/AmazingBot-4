@@ -2,6 +2,7 @@ package me.albert.amazingbot.utils.command;
 
 import me.albert.amazingbot.AmazingBot;
 import me.albert.amazingbot.bot.Bot;
+import me.albert.amazingbot.utils.FoliaUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -12,7 +13,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class ConsoleSender implements ConsoleCommandSender {
     private final ArrayList<String> output = new ArrayList<>();
     private final ArrayList<String> tempOutPut = new ArrayList<>();
     private final ConsoleSender instance;
-    private BukkitTask task = null;
+    private FoliaUtil.Task task = null;
 
     public ConsoleSender(long contactID, boolean isGroup) {
         this.contactID = contactID;
@@ -56,7 +56,7 @@ public class ConsoleSender implements ConsoleCommandSender {
         synchronized (tempOutPut) {
             tempOutPut.add(message);
         }
-        task = Bukkit.getScheduler().runTaskLaterAsynchronously(AmazingBot.getInstance(), () -> {
+        task = FoliaUtil.runTaskLaterAsync(AmazingBot.getInstance(), () -> {
             synchronized (output) {
                 synchronized (tempOutPut) {
                     output.addAll(tempOutPut);

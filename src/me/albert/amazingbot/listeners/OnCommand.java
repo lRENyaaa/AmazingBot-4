@@ -2,6 +2,7 @@ package me.albert.amazingbot.listeners;
 
 import me.albert.amazingbot.AmazingBot;
 import me.albert.amazingbot.events.message.GroupMessageEvent;
+import me.albert.amazingbot.utils.FoliaUtil;
 import me.albert.amazingbot.utils.command.ConsoleSender;
 import me.albert.amazingbot.utils.command.ConsoleSenderLegacy;
 import org.bukkit.Bukkit;
@@ -76,7 +77,7 @@ public class OnCommand implements Listener {
         event.response("命令已提交");
         String cmd = msg.substring(label.length());
         CommandSender sender = getSender(event.getGroupID(), true);
-        Bukkit.getScheduler().runTask(AmazingBot.getInstance(), () -> Bukkit.dispatchCommand(sender, cmd));
+        FoliaUtil.runTask(AmazingBot.getInstance(), () -> Bukkit.dispatchCommand(sender, cmd));
         String log = AmazingBot.getInstance().getConfig().getString("messages.log_command")
                 .replace("%user%", String.valueOf(event.getUserID())).replace("%cmd%", cmd)
                 .replace("&", "§");
